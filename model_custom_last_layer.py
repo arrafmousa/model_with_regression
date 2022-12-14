@@ -140,8 +140,8 @@ def test(data_files, path_to_model=None):
     return np.mean(loss_np), np.count_nonzero(loss_np < 0.1) / loss_np.size, results
 
 if __name__ == "__main__":
-    data_files = {'train': '/Users/a.mosa/Desktop/bert_with_regression/data2/train.csv',
-                  'test': '/Users/a.mosa/Desktop/bert_with_regression/data2/test.csv'}
+    data_files = {'train': 'data2/train.csv',
+                  'test': 'data2/test.csv'}
     train(data_files, path_to_model)
     test_error = test(data_files, path_to_model)
     print(f"********* TEST ERROR ******\n"
