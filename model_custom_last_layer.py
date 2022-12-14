@@ -6,8 +6,8 @@ from transformers import BertForQuestionAnswering, BertTokenizer, AutoTokenizer,
 from datasets import load_dataset
 from torch.utils.data import DataLoader
 
-tokenizer = AutoTokenizer.from_pretrained("valhalla/longformer-base-4096-finetuned-squadv1")
-path_to_model = "longformer_saved_model.ml"
+tokenizer = AutoTokenizer.from_pretrained("roberta-base")
+path_to_model = "roberta-base"
 num_epoch = 5
 batch_size = 8
 
@@ -15,7 +15,7 @@ batch_size = 8
 class CustomROBERTAModel(nn.Module):
     def __init__(self):
         super(CustomROBERTAModel, self).__init__()
-        self.model = AutoModelForQuestionAnswering.from_pretrained("valhalla/longformer-base-4096-finetuned-squadv1")
+        self.model = AutoModelForQuestionAnswering.from_pretrained("roberta-base")
         ### New layers:
         self.linear1 = nn.Linear(768, 256)
         self.linear2 = nn.Linear(256, 1)
@@ -140,8 +140,8 @@ def test(data_files, path_to_model=None):
     return np.mean(loss_np), np.count_nonzero(loss_np < 0.1) / loss_np.size, results
 
 if __name__ == "__main__":
-    data_files = {'train': '/Users/a.mosa/Desktop/bert_with_regression/data/train.csv',
-                  'test': '/Users/a.mosa/Desktop/bert_with_regression/data/test.csv'}
+    data_files = {'train': '/Users/a.mosa/Desktop/bert_with_regression/data2/train.csv',
+                  'test': '/Users/a.mosa/Desktop/bert_with_regression/data2/test.csv'}
     train(data_files, path_to_model)
     test_error = test(data_files, path_to_model)
     print(f"********* TEST ERROR ******\n"
