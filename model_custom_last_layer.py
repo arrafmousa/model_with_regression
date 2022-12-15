@@ -7,7 +7,7 @@ from datasets import load_dataset
 from torch.utils.data import DataLoader
 
 tokenizer = AutoTokenizer.from_pretrained("xlnet-base-cased")
-path_to_model = "xlnet-base-cased"
+path_to_save_model = "xlnet-base-cased"
 num_epoch = 3
 batch_size = 8
 
@@ -91,10 +91,6 @@ def train(data_files, path_to_model):
         #         plt.show()
         #         num_examples = 0
         # plt.savefig('training_error.png')
-    torch.save(model.state_dict(), path_to_model)
-
-
-def test(data_files, path_to_model=None):
     column_names = ['context', 'question', 'label', 'answer_starts']
     raw_dataset = load_dataset("csv", data_files=data_files, column_names=column_names)
 
@@ -104,12 +100,7 @@ def test(data_files, path_to_model=None):
     small_eval_dataloader = DataLoader(small_eval_dataset, shuffle=True, batch_size=batch_size)
     full_eval_dataloader = DataLoader(full_eval_dataset, batch_size=batch_size)
 
-    model = CustomROBERTAModel()
-    if path_to_model is None:
-        train(data_files, path_to_model)
-    model.load_state_dict(torch.load(path_to_model))
     model.eval()
-
     loss = []
     results = []
     for batch in tqdm(full_eval_dataloader):  ## If you have a DataLoader()  object to get the data.
@@ -140,11 +131,14 @@ def test(data_files, path_to_model=None):
     return np.mean(loss_np), np.count_nonzero(loss_np < 0.1) / loss_np.size, results
 
 
+# def test(data_files, path_to_model=None):
+
+
 if __name__ == "__main__":
     data_files = {'train': 'data2/train.csv',
                   'test': 'data2/test.csv'}
-    train(data_files, path_to_model)
-    test_error = test(data_files, path_to_model)
+
+    test_error = train(data_files, path_to_save_model)
     print(f"********* TEST ERROR ******\n"
           f"\t{test_error[0]}, while accuracy is {test_error[1]}")
     print(test_error[2])
