@@ -6,8 +6,8 @@ from transformers import BertForQuestionAnswering, BertTokenizer, AutoTokenizer,
 from datasets import load_dataset
 from torch.utils.data import DataLoader
 
-tokenizer = AutoTokenizer.from_pretrained("xlnet-base-cased")
-path_to_model = "xlnet-base-cased"
+tokenizer = AutoTokenizer.from_pretrained("roberta-base")
+path_to_model = "roberta-base"
 num_epoch = 5
 batch_size = 8
 
@@ -15,7 +15,7 @@ batch_size = 8
 class CustomROBERTAModel(nn.Module):
     def __init__(self):
         super(CustomROBERTAModel, self).__init__()
-        self.model = AutoModelForQuestionAnswering.from_pretrained("xlnet-base-cased")
+        self.model = AutoModelForQuestionAnswering.from_pretrained("roberta-base")
         ### New layers:
         self.linear1 = nn.Linear(768, 256)
         self.linear2 = nn.Linear(256, 1)
